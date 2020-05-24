@@ -3,13 +3,12 @@
 #include <vector>
 using namespace std;
 
-int V,E;
-
-vector<pair<int,pair<int,int> > > adj;
+int n,m;
+vector<pair<int,pair<int,int>>> adj;
 
 struct DisjointSet{
     vector<int> parent, rank;
-    DisjointSet(int n): parent(n),rank(n,1){
+    DisjointSet(int n): parent(n), rank(n,1){
         for(int i=0;i<n;i++)
             parent[i] = i;
     }
@@ -18,7 +17,6 @@ struct DisjointSet{
             return u;
         return parent[u] = find(parent[u]);
     }
-
     void merge(int u, int v){
         u = find(u); v = find(v);
         if(u == v)
@@ -29,36 +27,41 @@ struct DisjointSet{
         if(rank[u] == rank[v])
             rank[v]++;
     }
-
 };
 
-int kruskal() {
+int kruskal(){
     int ret = 0;
-    int last = 0;
-    DisjointSet sets(V);
+    DisjointSet sets(m);
     sort(adj.begin(), adj.end());
-    for (int i = 0; i < E; i++) {
+    for(int i=0;i<adj.size();i++){
         int cost = adj[i].first;
         int u = adj[i].second.first;
         int v = adj[i].second.second;
-        if (sets.find(u) == sets.find(v))
+        if(sets.find(u) == sets.find(v))
             continue;
-        sets.merge(u, v);
+        sets.merge(u,v);
         ret += cost;
-        last = cost;
     }
-    return ret-last;
+    return ret;
 }
 
 int main(){
-    cin >> V >> E;
-    V++;
-    for(int i=0;i<E;i++){
-        int u,v,w;
-        cin >> u >> v >> w;
-        adj.push_back(make_pair(w,make_pair(u,v)));
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    while(1){
+        adj.clear();
+        int sum = 0;
+        cin >> m >> n;
+        if(m == 0 && n == 0)
+            break;
+        for(int i=0;i<n;i++){
+            int x,y,z;
+            cin >> x >> y >> z;
+            adj.push_back({z,{x,y}});
+            sum+=z;
+        }
+        cout << sum-kruskal() << "\n";
     }
-
-    cout << kruskal() << "\n";
+    return 0;
 }
 
