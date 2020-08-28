@@ -1,3 +1,6 @@
 ## Algorithm Ignore File ##
 
 a
+*.out
+.vscode
+*.out.dSYM/
