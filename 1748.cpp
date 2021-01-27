@@ -1,30 +1,26 @@
 #include <iostream>
 using namespace std;
 
+int getDigits(int n) {
+    int ret = 0;
+    while (n > 0) {
+        n /= 10;
+        ret++;
+    }
+    return ret;
+}
+
 int main() {
-	int n;
-	long long sum = 0;
-	cin >> n;
-	for (int i = 1; i <= n; i++) {
-		if (i < 10)
-			sum += 1;
-		else if (10 <= i && i < 100)
-			sum += 2;
-		else if (100 <= i && i < 1000)
-			sum += 3;
-		else if (1000 <= i && i < 10000)
-			sum += 4;
-		else if (10000 <= i&& i < 100000)
-			sum += 5;
-		else if (100000 <= i && i < 1000000)
-			sum += 6;
-		else if (1000000 <= i && i < 10000000)
-			sum += 7;
-		else if (10000000 <= i && i < 100000000)
-			sum += 8;
-		else
-			sum += 9;
-	}
-	cout << sum << "\n";
-	return 0;
+    int n;
+    int ans = 0;
+    cin >> n;
+    long long cnt[10] = {0,      9,       180,      2700,      36000,
+                         450000, 5400000, 63000000, 720000000, 9};
+    int k = getDigits(n);
+    for (int i = 1; i < k; i++) ans += cnt[i];
+    int d = 1;
+    for (int i = 0; i < k - 1; i++) d *= 10;
+    ans += (n - d + 1) * k;
+    cout << ans << endl;
+    return 0;
 }
