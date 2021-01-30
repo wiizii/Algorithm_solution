@@ -3,20 +3,32 @@
 #include <string>
 using namespace std;
 
-int arr[51][51];
+char arr[51][51];
 int n;
 
-void getMaxAns(int &ans) {
+int getAns() {
+    int ret = 1;
     for (int i = 0; i < n; i++) {
-        int check[4] = {0, 0, 0, 0};
-        for (int j = 0; j < n; j++) check[arr[i][j]]++;
-        for (int j = 0; j < 4; j++) ans = max(ans, check[j]);
+        int tmp = 1;
+        for (int j = 0; j < n - 1; j++) {
+            if (arr[i][j] == arr[i][j + 1]) {
+                tmp++;
+                ret = max(ret, tmp);
+            } else
+                tmp = 1;
+        }
     }
     for (int j = 0; j < n; j++) {
-        int check[4] = {0, 0, 0, 0};
-        for (int i = 0; i < n; i++) check[arr[i][j]]++;
-        for (int i = 0; i < 4; i++) ans = max(ans, check[i]);
+        int tmp = 1;
+        for (int i = 0; i < n - 1; i++) {
+            if (arr[i][j] == arr[i + 1][j]) {
+                tmp++;
+                ret = max(ret, tmp);
+            } else
+                tmp = 1;
+        }
     }
+    return ret;
 }
 
 int main() {
@@ -24,25 +36,16 @@ int main() {
     cin >> n;
     for (int i = 0; i < n; i++) {
         cin >> s;
-        for (int j = 0; j < n; j++) {
-            if (s[j] == 'C')
-                arr[i][j] = 0;
-            else if (s[j] == 'P')
-                arr[i][j] = 1;
-            else if (s[j] == 'Z')
-                arr[i][j] = 2;
-            else if (s[j] == 'Y')
-                arr[i][j] = 3;
-        }
+        for (int j = 0; j < n; j++) arr[i][j] = s[j];
     }
-    int ans = 0;
+    int ans = 1;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n - 1; j++) {
             swap(arr[i][j], arr[i][j + 1]);
-            getMaxAns(ans);
+            ans = max(getAns(), ans);
             swap(arr[i][j], arr[i][j + 1]);
             swap(arr[j][i], arr[j + 1][i]);
-            getMaxAns(ans);
+            ans = max(getAns(), ans);
             swap(arr[j][i], arr[j + 1][i]);
         }
     }
