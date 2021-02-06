@@ -1,61 +1,72 @@
 #include <iostream>
-#include <stack>
 #include <string>
+#include <vector>
 using namespace std;
+
+bool isCorrect(string str) {
+    vector<char> v;
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] == '(' || str[i] == '[')
+            v.push_back(str[i]);
+        else if (!v.empty() && v.back() == '(' && str[i] == ')')
+            v.pop_back();
+        else if (!v.empty() && v.back() == '[' && str[i] == ']')
+            v.pop_back();
+        else if(v.empty() && (str[i] == ']' || str[i] == ')'))
+            return false;
+    }
+    if (v.empty())
+        return true;
+    else
+        return false;
+}
 
 int main() {
     string str;
-    stack<char> s;
-    stack<int> a;
     cin >> str;
+    if (!isCorrect(str)) {
+        cout << 0 << "\n";
+        return 0;
+    }
+    vector<int> ans;
+    vector<char> v;
     for (int i = 0; i < str.size(); i++) {
-        if (str[i] == '(' || str[i] == '[') {
-            s.push(str[i]);
-        } else {
-            if (!s.empty()) {
-                if (str[i] == ')' && s.top() == '(') {
-                    s.pop();
-                    s.push('a');
-                    a.push(2);
-                } else if (str[i] == ']' && s.top() == '[') {
-                    s.pop();
-                    s.push('a');
-                    a.push(3);
-                } else if (str[i] == ')' && s.top() == 'a') {
-                    int x = 0;
-                    while (s.top() == 'a') {
-                        s.pop();
-                        x += a.top();
-                        a.pop();
-                    }
-                    s.pop();
-                    a.push(x * 2);
-                    s.push('a');
-                } else if (str[i] == ']' && s.top() == 'a') {
-                    int x = 0;
-                    while (s.top() == 'a') {
-                        s.pop();
-                        x += a.top();
-                        a.pop();
-                    }
-                    s.pop();
-                    a.push(x * 3);
-                    s.push('a');
-                }
+        if (str[i] == '(' || str[i] == '[')
+            v.push_back(str[i]);
+        else if (!v.empty() && v.back() == '(' && str[i] == ')') {
+            v.pop_back();
+            v.push_back('A');
+            ans.push_back(2);
+        } else if (!v.empty() && v.back() == '[' && str[i] == ']') {
+            v.pop_back();
+            v.push_back('A');
+            ans.push_back(3);
+        } else if (!v.empty() && v.back() == 'A' && str[i] == ')') {
+            int tmp = 0;
+            while (v.back() == 'A') {
+                tmp += ans.back();
+                ans.pop_back();
+                v.pop_back();
             }
+            v.pop_back();
+            ans.push_back(tmp * 2);
+            v.push_back('A');
+        } else if (!v.empty() && v.back() == 'A' && str[i] == ']') {
+            int tmp = 0;
+            while (v.back() == 'A') {
+                tmp += ans.back();
+                ans.pop_back();
+                v.pop_back();
+            }
+            v.pop_back();
+            ans.push_back(tmp * 3);
+            v.push_back('A');
         }
     }
-    int ans = 0;
-    while (!s.empty()) {
-        if (s.top() == 'a') {
-            ans += a.top();
-            a.pop();
-            s.pop();
-        } else {
-            ans = 0;
-            break;
-        }
-    }
-    cout << ans << '\n';
+
+    int ret = 0;
+    for (int i = 0; i < ans.size(); i++) ret += ans[i];
+    cout << ret << "\n";
+
     return 0;
 }
