@@ -6,44 +6,26 @@ using namespace std;
 bool check[100001];
 
 int main() {
-    vector<int> ans;
     int n, k;
+    int minSec = 0;
+    int cnt = 0;
     cin >> n >> k;
-    if (n == k) {
-        cout << 1 << "\n" << 0 << "\n";
-        return 0;
-    }
     queue<pair<int, int>> q;
     q.push({n, 0});
     check[n] = true;
     while (!q.empty()) {
         int cur = q.front().first;
         int t = q.front().second;
-        int next;
         q.pop();
-        next = cur + 1;
-        if (next == k) ans.push_back(t + 1);
-        if (next <= 100000 && !check[next]) {
-            check[next] = true;
-            q.push({next, t + 1});
+        check[cur] = true;
+        if (minSec && minSec == t && cur == k) cnt++;
+        if (!minSec && cur == k) {
+            minSec = t;
+            cnt++;
         }
-        next = cur - 1;
-        if (next == k) ans.push_back(t + 1);
-        if (0 <= next && !check[next]) {
-            check[next] = true;
-            q.push({next, t + 1});
-        }
-        next = cur * 2;
-        if (next <= 100000 && !check[next]) {
-            check[next] = true;
-            q.push({next, t + 1});
-        }
-        if (next == k) ans.push_back(t + 1);
+        if (cur + 1 <= 100000 && !check[cur + 1]) q.push({cur + 1, t + 1});
+        if (0 <= cur - 1 && !check[cur - 1]) q.push({cur - 1, t + 1});
+        if (cur * 2 <= 100000 && !check[cur * 2]) q.push({cur * 2, t + 1});
     }
-    int tmp = ans.front();
-    int sum = 0;
-    for (int i = 0; i < ans.size(); i++) {
-        if (ans[i] == tmp) sum++;
-    }
-    cout << tmp << "\n" << sum << "\n";
+    cout << minSec << "\n" << cnt << "\n";
 }
