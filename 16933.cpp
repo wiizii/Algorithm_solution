@@ -25,7 +25,7 @@ int main() {
     }
     queue<info> q;
     check[0][0][0] = 1;
-    q.push({0, 0, 0, 0});
+    q.push({0, 0, 0, 1});
     while (!q.empty()) {
         int x = q.front().x;
         int y = q.front().y;
@@ -33,12 +33,12 @@ int main() {
         int d = q.front().d;
         q.pop();
         if (x == n - 1 && y == m - 1) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    cout << check[i][j][1] << " ";
-                }
-                cout << endl;
-            }
+            // for (int i = 0; i < n; i++) {
+            //     for (int j = 0; j < m; j++) {
+            //         cout << check[i][j][1] << " ";
+            //     }
+            //     cout << endl;
+            // }
             cout << check[x][y][t] << "\n";
             return 0;
         }
@@ -48,17 +48,16 @@ int main() {
             int ny = y + dy[i];
             if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
             if (map[nx][ny] && !check[nx][ny][t + 1]) {
-                if (d) {
-                    check[nx][ny][t + 1] = check[x][y][t] + 2;
-                    q.push({nx, ny, t + 1, d});
+                if (d % 2 == 0) {
+                    q.push({x, y, t, d + 1});
                 } else {
-                    check[nx][ny][t + 1] = check[x][y][t] + 1;
-                    q.push({nx, ny, t + 1, !d});
+                    check[nx][ny][t + 1] = d + 1;
+                    q.push({nx, ny, t + 1, d + 1});
                 }
             }
             if (!map[nx][ny] && !check[nx][ny][t]) {
-                check[nx][ny][t] = check[x][y][t] + 1;
-                q.push({nx, ny, t, !d});
+                check[nx][ny][t] = d + 1;
+                q.push({nx, ny, t, d + 1});
             }
         }
     }
