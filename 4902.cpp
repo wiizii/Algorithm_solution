@@ -22,10 +22,17 @@ int solve_down(int x, int y) {
     int &ret = dp[x][y];
     if (ret != -0x3f3f3f3f) return ret;
     if (x == 0) return -0x3f3f3f3f;
-    int acc = 0;
-    for (int j = y; j < x * 2 + 1; j += 2) {
-        if (j - 2 < 0) continue;
-        for (int i = y; j < i * 2) }
+    for (int k = y; k < x * 2 + 1; k += 2) {
+        int acc = arr[x][k];
+        for (int i = x; i >= 0; i -= 2) {
+            if (k - 2 < 0 || k >= (i - 1) * 2 + 1))
+          continue;
+            for (int j = k - 2; j <= k) }
+        for (int j = 1; j < x * 2; j++) {
+            acc += arr[i][j];
+        }
+    }
+    ret = max(ret, solve(x - 1, y));
 }
 
 int main() {
