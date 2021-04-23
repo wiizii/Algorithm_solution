@@ -5,23 +5,7 @@ vector<int> angle;
 bool check[400];
 int n, k;
 
-void solve(int acc, int cnt) {
-    if (cnt == n) {
-        while (acc >= 360) acc -= 360;
-        while (acc < 0) acc += 360;
-        int tmp = acc;
-        while (tmp < 360) {
-            check[tmp] = true;
-            check[360 - tmp] = true;
-            if (tmp == 0) break;
-            tmp += acc;
-        }
-        return;
-    }
-    solve(acc + angle[cnt], cnt + 1);
-    solve(acc - angle[cnt], cnt + 1);
-    solve(acc, cnt + 1);
-}
+void solve(int acc, int cnt) {}
 
 int main() {
     cin >> n >> k;
