@@ -70,69 +70,31 @@ void make_block(int t, int x, int y, int n) {
 
 int remove_line() {
     int line = 0;
-    for (int j = 2; j < 6; j++) {
+    for (int j = 5; j > 1; j--) {
         for (int i = 0; i < 4; i++) {
             if (blue[i][j] == 0) break;
             if (i == 3) {
                 line++;
-                for (int k = 0; k < 4; k++) blue[k][j] = 0;
+                for (int k = j; k >= 0; k--)
+                    for (int l = 0; l < 4; l++) blue[l][k] = blue[l][k - 1];
+                for (int k = 0; k < 4; k++) blue[k][0] = 0;
+                j++;
             }
         }
     }
-    for (int i = 2; i < 6; i++) {
+    for (int i = 5; i > 1; i--) {
         for (int j = 0; j < 4; j++) {
             if (green[i][j] == 0) break;
             if (j == 3) {
                 line++;
-                for (int k = 0; k < 4; k++) green[i][k] = 0;
+                for (int k = i; k >= 0; k--)
+                    for (int l = 0; l < 4; l++) green[k][l] = green[k - 1][l];
+                for (int k = 0; k < 4; k++) green[0][k] = 0;
+                i++;
             }
         }
     }
     return line;
-}
-
-void push_line() {
-    for (int j = 4; j >= 0; j--) {
-        for (int i = 0; i < 4; i++) {
-            if (blue[i][j]) {
-                if (i < 3 && blue[i][j] == blue[i + 1][j]) {
-                    for (int k = j; k < 5 && blue[i][k + 1] == 0 &&
-                                    blue[i + 1][k + 1] == 0;
-                         k++) {
-                        blue[i][k + 1] = blue[i + 1][k + 1] = blue[i][k];
-                        blue[i][k] = blue[i + 1][k] = 0;
-                    }
-                    i++;
-                } else {
-                    for (int k = j; k < 5 && blue[i][k + 1] == 0; k++) {
-                        blue[i][k + 1] = blue[i][k];
-                        blue[i][k] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    for (int i = 4; i >= 0; i--) {
-        for (int j = 0; j < 4; j++) {
-            if (green[i][j]) {
-                if (j < 3 && green[i][j] == green[i][j + 1]) {
-                    for (int k = i; k < 5 && green[k + 1][j] == 0 &&
-                                    green[k + 1][j + 1] == 0;
-                         k++) {
-                        green[k + 1][j] = green[k + 1][j + 1] = green[k][j];
-                        green[k][j] = green[k][j + 1] = 0;
-                    }
-                    j++;
-                } else {
-                    for (int k = i; k < 5 && green[k + 1][j] == 0; k++) {
-                        green[k + 1][j] = green[k][j];
-                        green[k][j] = 0;
-                    }
-                }
-            }
-        }
-    }
 }
 
 void move_line() {
@@ -212,11 +174,7 @@ int main() {
         int t, x, y;
         cin >> t >> x >> y;
         make_block(t, x, y, i);
-        int removed = remove_line();
-        if (removed) {
-            ans1 += removed;
-            push_line();
-        }
+        ans1 += remove_line();
         move_line();
     }
     cout << ans1 << "\n" << find_ans2() << "\n";
