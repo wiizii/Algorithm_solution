@@ -12,11 +12,10 @@ vector<int> dijkstra(int n, int start) {
     vector<int> dist(n + 1, INF);
     priority_queue<pair<int, int>> pq;
     dist[start] = 0;
-    pq.push({start, 0});
-
+    pq.push({0, start});
     while (!pq.empty()) {
-        int cur = pq.top().first;
-        int cur_dist = -pq.top().second;
+        int cur_dist = -pq.top().first;
+        int cur = pq.top().second;
         pq.pop();
         if (dist[cur] < cur_dist) continue;
         for (int i = 0; i < adj[cur].size(); i++) {
