@@ -1,34 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
-using pii = pair<int, int>;
 
 int arr[101];
-int cnt[101];
-bool cur[101];
-priority_queue<pii, vector<pii>, greater<pii>> pq;
+set<int> plug;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    for (int i = 0; i < k; i++) {
-        int x;
-        cin >> x;
-        arr[i] = x;
-        cnt[x]++;
-    }
     int answer = 0;
+    int n, k;
+    int idx = 0;
+    cin >> n >> k;
+    for (int i = 0; i < k; i++) cin >> arr[i];
     for (int i = 0; i < k; i++) {
-        if (cur[arr[i]]) continue;
-        if (pq.size() != n) {
-            cnt[arr[i]]--;
-            pq.push({cnt[arr[i]], arr[i]});
-            cur[arr[i]] = true;
-        } else {
+        if (plug.count(arr[i])) continue;
+        if (plug.size() == n) {
+            int last = 0, e = 0;
+            for (auto& p : plug) {
+                bool flag = false;
+                for (int j = i + 1; j < k; j++) {
+                    if (p == arr[j]) {
+                        flag = true;
+                        last = max(last, j);
+                        break;
+                    }
+                }
+                if (!flag) e = p;
+            }
+            if (e)
+                plug.erase(e);
+            else
+                plug.erase(arr[last]);
+            plug.insert(arr[i]);
             answer++;
-            cur[pq.top().second] = false;
-            pq.pop();
-            cnt[arr[i]]--;
-            pq.push({cnt[arr[i]], arr[i]});
+        } else {
+            plug.insert(arr[i]);
         }
     }
     cout << answer << "\n";
