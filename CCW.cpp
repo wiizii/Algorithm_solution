@@ -1,20 +1,30 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
+using pdd = pair<double, double>;
 
-struct vector2 {
-    double x, y;
-    vector2(double _x, double _y) { x = _x, y = _y; }
-    double cross(const vector2 &other) { return x * other.y - y * other.x; }
-};
+int ccw(pdd p1, pdd p2, pdd p3) {
+    double tmp =
+        p1.first * p2.second + p2.first * p3.second + p3.first * p1.second;
+    tmp = tmp - p1.second * p2.first - p2.second * p3.first -
+          p3.second * p1.first;
+    if (tmp > 0)
+        return 1;  //반시계
+    else if (tmp == 0)
+        return 0;  //일직선
+    else if (tmp < 0)
+        return -1;  //시계
+}
 
-int main() {
-    double x0, x1, x2, y0, y1, y2;
-    cin >> x0 >> y0;
-    cin >> x1 >> y1;
-    cin >> x2 >> y2;
-    vector2 a(x1 - x0, y1 - y0);
-    vector2 b(x2 - x1, y2 - y1);
-    if (a.cross(b) > 0) cout << 1 << "\n";
-    if (a.cross(b) == 0) cout << 0 << "\n";
-    if (a.cross(b) < 0) cout << -1 << "\n";
+bool check(pdd a, pdd b, pdd c, pdd d) {
+    int abc = ccw(a, b, c);
+    int abd = ccw(a, b, d);
+    int cda = ccw(c, d, a);
+    int cdb = ccw(c, d, b);
+
+    if (abc * abd == 0 && cda * cdb == 0) {
+        if (a > b) swap(a, b);
+        if (c > d) swap(c, d);
+        return a <= d && c <= b;
+    }
+    return abc * abd <= 0 && cda * cdb <= 0;
 }
