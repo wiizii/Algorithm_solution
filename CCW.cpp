@@ -15,6 +15,7 @@ int ccw(pdd p1, pdd p2, pdd p3) {
         return -1;  //시계
 }
 
+//교차검증
 bool check(pdd a, pdd b, pdd c, pdd d) {
     int abc = ccw(a, b, c);
     int abd = ccw(a, b, d);
