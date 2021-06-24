@@ -1,26 +1,38 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
+using pdd = pair<double, double>;
 
-struct vector2 {
-    double x, y;
-    vector2(double _x, double _y) { x = _x, y = _y; }
-    double cross(const vector2 &other) { return x * other.y - y * other.x; }
-};
+int ccw(pdd p1, pdd p2, pdd p3) {
+    double tmp =
+        p1.first * p2.second + p2.first * p3.second + p3.first * p1.second;
+    tmp = tmp - p1.second * p2.first - p2.second * p3.first -
+          p3.second * p1.first;
+    if (tmp > 0)
+        return 1;  //반시계
+    else if (tmp == 0)
+        return 0;  //일직선
+    else
+        return -1;  //시계
+}
+
+bool check(pdd a, pdd b, pdd c, pdd d) {
+    int abc = ccw(a, b, c);
+    int abd = ccw(a, b, d);
+    int cda = ccw(c, d, a);
+    int cdb = ccw(c, d, b);
+
+    if (abc * abd == 0 && cda * cdb == 0) {
+        if (a > b) swap(a, b);
+        if (c > d) swap(c, d);
+        return a <= d && c <= b;
+    }
+    return abc * abd <= 0 && cda * cdb <= 0;
+}
 
 int main() {
-    double x0, x1, x2, x3, y0, y1, y2, y3;
-    cin >> x0 >> y0;
-    cin >> x1 >> y1;
-    cin >> x2 >> y2;
-    cin >> x3 >> y3;
-    vector2 AB(x1 - x0, y1 - y0);
-    vector2 BC(x2 - x1, y2 - y1);
-    vector2 BD(x3 - x1, y3 - y1);
-    vector2 CD(x3 - x2, y3 - y2);
-    vector2 DA(x0 - x3, y0 - y3);
-    vector2 DB(x1 - x3, y1 - y3);
-
-    if (AB.cross(BC) * AB.cross(BD) < 0 && CD.cross(DA) * CD.cross(DB) < 0)
+    pdd p[4];
+    for (int i = 0; i < 4; i++) cin >> p[i].first >> p[i].second;
+    if (check(p[0], p[1], p[2], p[3]))
         cout << 1 << "\n";
     else
         cout << 0 << "\n";
