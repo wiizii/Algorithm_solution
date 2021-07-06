@@ -1,19 +1,31 @@
 #include <iostream>
+#define ll long long
 using namespace std;
 
+const ll INF = 0x3f3f3f3f3f3f3f3f;
+
 int main() {
-    int x, y, z;
+    ll x, y;
+    ll ans = INF;
     cin >> x >> y;
-    if (x == y) {
-        cout << -1 << "\n";
+    int z = (y * 100) / x;
+    if (z >= 99) {
+        cout << "-1\n";
         return 0;
     }
-    z = ((double)y / (double)x) * 100;
-    int ans = 0;
-    int next = z;
-    while (next == z) {
-        next = ((double)++y / (double)++x) * 100;
-        ans++;
+    int l = 0, r = 1000000000;
+    while (l <= r) {
+        ll mid = (l + r) / 2;
+        int nextZ = ((y + mid) * 100) / (x + mid);
+        if (nextZ > z) {
+            ans = min(ans, mid);
+            r = mid - 1;
+        } else {
+            l = mid + 1;
+        }
     }
-    cout << ans << "\n";
+    if (ans == INF)
+        cout << "-1\n";
+    else
+        cout << ans << "\n";
 }
