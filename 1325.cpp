@@ -21,6 +21,7 @@ int bfs(int _x) {
     memset(check, 0, sizeof(check));
     queue<int> q;
     q.push(_x);
+    check[_x] = true;
     while (!q.empty()) {
         int x = q.front();
         q.pop();
