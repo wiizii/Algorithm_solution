@@ -23,7 +23,7 @@ vector<int> dijkstra(int n, int start) {
             int next_dist = cur_dist + adj[cur][i].second;
             if (next_dist < dist[next]) {
                 dist[next] = next_dist;
-                pq.push({next, -next_dist});
+                pq.push({-next_dist, next});
             }
         }
     }
