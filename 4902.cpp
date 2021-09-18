@@ -1,38 +1,37 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int INF = -0x3f3f3f3f;
 int arr[410][810];
 int dp[410][810];
 int l;
 
 int solve_up(int x, int y) {
     int &ret = dp[x][y];
-    if (ret != -0x3f3f3f3f) return ret;
-    if (x >= 3) return ret;
-    int acc = 0;
-    for (int i = x; i < l; i++) {
-        for (int j = y; j < i * 2 + 1; j++) acc += arr[i][j];
-        ret = max(ret, acc);
+    if (ret != INF) return ret;
+    ret = arr[x][y];
+    if (y >= 0 && y + 2 < (x + 1) * 2 + 1) {
+        ret += solve_up(x + 1, y);
+        ret += solve_up(x + 1, y + 2);
+        ret += arr[x + 1][y + 1];
     }
-    ret = max({ret, solve(x + 1, y), solve(x + 1, y + 2)});
+    if (x + 2 < l && 0 <= y && y + 4 < (x + 2) * 2 + 1)
+        ret -= solve_up(x + 2, y + 2);
     return ret;
 }
 
 int solve_down(int x, int y) {
     int &ret = dp[x][y];
-    if (ret != -0x3f3f3f3f) return ret;
-    if (x == 0) return -0x3f3f3f3f;
-    for (int k = y; k < x * 2 + 1; k += 2) {
-        int acc = arr[x][k];
-        for (int i = x; i >= 0; i -= 2) {
-            if (k - 2 < 0 || k >= (i - 1) * 2 + 1))
-          continue;
-            for (int j = k - 2; j <= k) }
-        for (int j = 1; j < x * 2; j++) {
-            acc += arr[i][j];
-        }
+    if (ret != INF) return ret;
+    ret = arr[x][y];
+    if (y - 2 >= 1 && y < (x - 1) * 2 + 1) {
+        ret += solve_down(x - 1, y - 2);
+        ret += solve_down(x - 1, y);
+        ret += arr[x - 1][y - 1];
     }
-    ret = max(ret, solve(x - 1, y));
+    if (x - 2 >= 1 && y - 4 >= 0 && y < (x - 2) * 2 + 1)
+        ret -= solve_down(x - 2, y - 2);
+    return ret;
 }
 
 int main() {
@@ -42,9 +41,28 @@ int main() {
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < i * 2 + 1; j++) {
                 cin >> arr[i][j];
-                dp[i][j] = -0x3f3f3f3f;
+                dp[i][j] = INF;
             }
         }
-        cout << t << ". " << max(solve_up(0, 0), solve_down(l - 1, 1)) << "\n";
+        int answer = INF;
+        solve_up(0, 0);
+        for (int i = 1; i < (l - 1) * 2 + 1; i += 2) {
+            solve_down(l - 1, i);
+        }
+        for (int i = 0; i < l; i++) {
+            for (int j = 0; j < i * 2 + 1; j++) {
+                answer = max(answer, dp[i][j]);
+            }
+        }
+
+        for (int i = 0; i < l; i++) {
+            for (int j = 0; j < i * 2 + 1; j++) {
+                cout << dp[i][j] << " ";
+            }
+            cout << "\n";
+        }
+
+        answer = max(answer, arr[1][1]);
+        cout << t << ". " << answer << "\n";
     }
 }
