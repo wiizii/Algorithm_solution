@@ -6,11 +6,11 @@ int dp[301][301];
 int n, m;
 
 int solve(int x, int y) {
+    if (x < 0 || y < 0) return 0;
     int &ret = dp[x][y];
     if (ret != -1) return ret;
     ret = arr[x][y];
     if (x == 0 && y == 0) return ret;
-    if (x < 0 || y < 0) return 0;
     ret += max(solve(x - 1, y), solve(x, y - 1));
     return ret;
 }
