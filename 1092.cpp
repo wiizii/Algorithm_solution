@@ -5,9 +5,12 @@ int n, m;
 
 int c[51];
 int box[10001];
-int idx[51];
+bool check[10001];
 
 int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int answer = 0;
     cin >> n;
     for (int i = 0; i < n; i++) cin >> c[i];
     cin >> m;
@@ -18,22 +21,26 @@ int main() {
         cout << "-1\n";
         return 0;
     }
-    int answer = 0;
-    int size = m;
-    for (int i = 0; i < n; i++) idx[i] = i;
+
+    int cnt = m;
+    int idx = 0;
+
     while (1) {
         for (int i = 0; i < n; i++) {
-            for (int j = idx[i]; j < m; j++) {
-                if (box[j] != 0 && c[i] >= box[j]) {
-                    box[j] = 0;
-                    idx[i]++;
-                    size--;
+            for (int j = idx; j < m; j++) {
+                if (c[i] >= box[j] && !check[j]) {
+                    check[j] = true;
+                    if (i == 0) {
+                        idx = j + 1;
+                    }
+                    cnt--;
                     break;
                 }
             }
         }
         answer++;
-        if (size == 0) break;
+        if (cnt == 0) break;
     }
+
     cout << answer << "\n";
 }
