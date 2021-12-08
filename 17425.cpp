@@ -17,11 +17,7 @@ int main() {
         dp[i] += (dp[i - 1] + 1);
     }
 
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        cout << dp[n] << "\n";
-    }
+    int n;
+    cin >> n;
+    cout << dp[n] << "\n";
 }
